@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EcoGuard</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        color: #333;
+      }
+
+      header {
+        background: linear-gradient(90deg, #1b5e20, #388e3c);
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
+        animation: fadeIn 1s ease-in-out;
+        border-bottom: 4px solid #a1887f; /* earthy brown accent */
+      }
+
+      #map {
+        height: 60vh;
+        width: 90%;
+        margin: 1rem auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1s ease-in-out;
+      }
+
+      /* Legend as a Leaflet control */
+      .legend {
+        background: white;
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, opacity 0.3s ease;
+      }
+
+      .legend img {
+        vertical-align: middle;
+        margin-right: 5px;
+      }
+
+      .legend-toggle {
+        background: #2f855a;
+        color: white;
+        padding: 0.3rem 0.6rem;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        margin-bottom: 5px;
+        display: inline-block;
+      }
+
+      .actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 10px;
+        padding: 1rem;
+        background: #fff;
+        border-radius: 10px;
+        margin: 1rem auto;
+        width: 90%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        animation: fadeIn 1.2s ease-in-out;
+      }
+
+      .btn {
+        padding: 1rem;
+        border-radius: 10px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        font-size: 1rem;
+        transition: transform 0.2s, opacity 0.2s;
+      }
+
+      .btn-green {
+        background: linear-gradient(135deg, #2e7d32, #66bb6a);
+      }
+
+      .btn-red {
+        background: linear-gradient(135deg, #c62828, #ef5350);
+      }
+
+      .btn-blue {
+        background: linear-gradient(135deg, #1565c0, #42a5f5);
+      }
+
+      .btn-yellow {
+        background: linear-gradient(135deg, #f9a825, #ffd54f);
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 600px) {
+        #map {
+          height: 50vh;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background: linear-gradient(90deg, #2e541a, #a0dca4);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        color: white;
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 10px">
+        <img
+          src="png.monster-142.png"
+          alt="EcoGuard Logo"
+          style="height: 40px; width: auto"
+        />
+        <h1 style="margin: 0; font-family: Arial, sans-serif">EcoGuard</h1>
+      </div>
+      <nav>
+        <a
+          href="index.html"
+          style="
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+          "
+          >Home</a
+        >
+        <a
+          href="about.html"
+          style="
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+          "
+          >About</a
+        >
+        <a
+          href="contact.html"
+          style="
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+          "
+          >Contact</a
+        >
+      </nav>
+    </header>
+
+    <div id="map"></div>
+
+    <div class="actions">
+      <a href="wildlife.html" class="btn btn-green">Wildlife Sighting</a>
+      <a href="threats.html" class="btn btn-red">Threat Monitoring</a>
+      <a href="gis.html" class="btn btn-blue">GIS Mapping</a>
+      <a href="reports.html" class="btn btn-yellow">Reports & Logs</a>
+      <a href="species.html" class="btn btn-yellow">Species Tracker</a>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+      var map = L.map("map").setView([-32.25, 22.4167], 13);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+        maxZoom: 19,
+      }).addTo(map);
+
+      var sightingIcon = L.icon({
+        iconUrl: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -28],
+      });
+
+      var threatIcon = L.icon({
+        iconUrl: "https://cdn-icons-png.flaticon.com/512/565/565547.png",
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -28],
+      });
+
+      var sightings = [
+        {
+          lat: -32.2505,
+          lng: 22.4165,
+          title: "Lion Sighting",
+          type: "sighting",
+          date: "2025-08-06",
+          time: "14:30",
+          reportedBy: "Ranger Bryn",
+          img: "https://upload.wikimedia.org/wikipedia/commons/7/73/Lion_waiting_in_Namibia.jpg",
+        },
+        {
+          lat: -32.26,
+          lng: 22.42,
+          title: "Black Rhino Threat Alert",
+          type: "threat",
+          date: "2025-08-05",
+          time: "06:30",
+          reportedBy: "Ranger Elvis",
+          img: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Black_Rhino.jpg",
+        },
+      ];
+
+      sightings.forEach(function (s) {
+        var icon = s.type === "threat" ? threatIcon : sightingIcon;
+        L.marker([s.lat, s.lng], { icon: icon }).addTo(map).bindPopup(`
+            <b>${s.title}</b><br/>
+            <i>Reported on:</i> ${s.date} at ${s.time || "N/A"}<br/>
+            <i>By:</i> ${s.reportedBy}<br/>
+            <img src="${
+              s.img
+            }" alt="${s.title}" width="100" style="margin-top:5px;border-radius:5px;"/>
+          `);
+      });
+
+      // Leaflet legend control
+      var legendControl = L.control({ position: "topright" });
+
+      legendControl.onAdd = function (map) {
+        var div = L.DomUtil.create("div", "legend");
+        div.innerHTML = `
+          <div class="legend-toggle" onclick="toggleLegend()">Toggle Legend</div>
+          <p>
+            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" width="20"/>
+            Wildlife Sighting
+          </p>
+          <p>
+            <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" width="20"/>
+            Threat Alert
+          </p>
+        `;
+        return div;
+      };
+
+      legendControl.addTo(map);
+
+      function toggleLegend() {
+        const legend = document.querySelector(".legend");
+        legend.style.opacity = legend.style.opacity === "0" ? "1" : "0";
+        legend.style.transform =
+          legend.style.opacity === "0" ? "translateY(20px)" : "translateY(0)";
+      }
+    </script>
+  </body>
+</html>
