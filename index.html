@@ -11,36 +11,99 @@
         font-family: Arial, sans-serif;
         background: #f4f4f4;
         color: #333;
+        padding-top: 70px; /* Prevent header overlap */
       }
 
+      /* ===== HEADER ===== */
       header {
-        background: linear-gradient(90deg, #1b5e20, #388e3c);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background: linear-gradient(90deg, #2e541a, #a0dca4);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         color: white;
-        padding: 1rem;
-        text-align: center;
-        font-size: 1.5rem;
-        font-weight: bold;
-        animation: fadeIn 1s ease-in-out;
-        border-bottom: 4px solid #a1887f; /* earthy brown accent */
+        flex-wrap: wrap;
       }
 
+      header h1 {
+        margin: 0;
+        font-size: 1.5rem;
+      }
+
+      nav {
+        display: flex;
+        gap: 10px;
+      }
+
+      nav a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      /* Hamburger button */
+      .menu-toggle {
+        display: none;
+        flex-direction: column;
+        cursor: pointer;
+        gap: 4px;
+      }
+
+      .menu-toggle span {
+        background: white;
+        height: 3px;
+        width: 25px;
+        border-radius: 2px;
+      }
+
+      /* Mobile nav hidden by default */
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
+          position: absolute;
+          top: 60px;
+          right: 0;
+          background: linear-gradient(90deg, #2e541a, #a0dca4);
+          width: 100%;
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.3s ease;
+          padding: 0;
+        }
+
+        nav.show {
+          max-height: 300px;
+          padding: 10px 0;
+        }
+
+        .menu-toggle {
+          display: flex;
+        }
+      }
+
+      /* ===== MAP ===== */
       #map {
         height: 60vh;
         width: 90%;
         margin: 1rem auto;
         border-radius: 10px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        animation: fadeIn 1s ease-in-out;
       }
 
-      /* Legend as a Leaflet control */
+      /* ===== LEGEND ===== */
       .legend {
         background: white;
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease, opacity 0.3s ease;
       }
 
       .legend img {
@@ -59,9 +122,10 @@
         display: inline-block;
       }
 
+      /* ===== ACTION BUTTONS ===== */
       .actions {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 10px;
         padding: 1rem;
         background: #fff;
@@ -69,7 +133,6 @@
         margin: 1rem auto;
         width: 90%;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        animation: fadeIn 1.2s ease-in-out;
       }
 
       .btn {
@@ -86,88 +149,59 @@
       .btn-green {
         background: linear-gradient(135deg, #2e7d32, #66bb6a);
       }
-
       .btn-red {
         background: linear-gradient(135deg, #c62828, #ef5350);
       }
-
       .btn-blue {
         background: linear-gradient(135deg, #1565c0, #42a5f5);
       }
-
       .btn-yellow {
         background: linear-gradient(135deg, #f9a825, #ffd54f);
       }
 
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
+      @media (max-width: 768px) {
+        #map {
+          height: 50vh;
+          width: 95%;
         }
       }
 
-      @media (max-width: 600px) {
-        #map {
-          height: 50vh;
+      @media (max-width: 480px) {
+        header h1 {
+          font-size: 1.2rem;
+        }
+        .btn {
+          padding: 0.8rem;
+          font-size: 0.9rem;
+        }
+        .legend {
+          font-size: 0.8rem;
         }
       }
     </style>
   </head>
   <body>
-    <header
-      style="
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 10px 20px;
-        background: linear-gradient(90deg, #2e541a, #a0dca4);
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        color: white;
-      "
-    >
+    <header>
       <div style="display: flex; align-items: center; gap: 10px">
         <img
           src="png.monster-142.png"
           alt="EcoGuard Logo"
           style="height: 40px; width: auto"
         />
-        <h1 style="margin: 0; font-family: Arial, sans-serif">EcoGuard</h1>
+        <h1>EcoGuard</h1>
       </div>
-      <nav>
-        <a
-          href="index.html"
-          style="
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: bold;
-          "
-          >Home</a
-        >
-        <a
-          href="about.html"
-          style="
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: bold;
-          "
-          >About</a
-        >
-        <a
-          href="contact.html"
-          style="
-            color: white;
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: bold;
-          "
-          >Contact</a
-        >
+
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <nav id="navbar">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="login.html">Login</a>
       </nav>
     </header>
 
@@ -183,6 +217,10 @@
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
+      function toggleMenu() {
+        document.getElementById("navbar").classList.toggle("show");
+      }
+
       var map = L.map("map").setView([-32.25, 22.4167], 13);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution:
@@ -222,49 +260,39 @@
           type: "threat",
           date: "2025-08-05",
           time: "06:30",
-          reportedBy: "Ranger Elvis",
-          img: "https://upload.wikimedia.org/wikipedia/commons/f/f2/Black_Rhino.jpg",
+          reportedBy: "Ranger Ralushe",
+          img: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Black_Rhino_at_Working_with_Wildlife.jpg",
         },
       ];
 
       sightings.forEach(function (s) {
         var icon = s.type === "threat" ? threatIcon : sightingIcon;
         L.marker([s.lat, s.lng], { icon: icon }).addTo(map).bindPopup(`
-            <b>${s.title}</b><br/>
-            <i>Reported on:</i> ${s.date} at ${s.time || "N/A"}<br/>
-            <i>By:</i> ${s.reportedBy}<br/>
-            <img src="${
-              s.img
-            }" alt="${s.title}" width="100" style="margin-top:5px;border-radius:5px;"/>
-          `);
+        <b>${s.title}</b><br/>
+        <i>Reported on:</i> ${s.date} at ${s.time || "N/A"}<br/>
+        <i>By:</i> ${s.reportedBy}<br/>
+        <img src="${
+          s.img
+        }" alt="${s.title}" width="100" style="margin-top:5px;border-radius:5px;"/>
+      `);
       });
 
-      // Leaflet legend control
       var legendControl = L.control({ position: "topright" });
-
       legendControl.onAdd = function (map) {
         var div = L.DomUtil.create("div", "legend");
         div.innerHTML = `
-          <div class="legend-toggle" onclick="toggleLegend()">Toggle Legend</div>
-          <p>
-            <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" width="20"/>
-            Wildlife Sighting
-          </p>
-          <p>
-            <img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" width="20"/>
-            Threat Alert
-          </p>
-        `;
+        <div class="legend-toggle" onclick="toggleLegend()">Toggle Legend</div>
+        <p><img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" width="20"/> Wildlife Sighting</p>
+        <p><img src="https://cdn-icons-png.flaticon.com/512/565/565547.png" width="20"/> Threat Alert</p>
+      `;
         return div;
       };
-
       legendControl.addTo(map);
 
       function toggleLegend() {
         const legend = document.querySelector(".legend");
-        legend.style.opacity = legend.style.opacity === "0" ? "1" : "0";
-        legend.style.transform =
-          legend.style.opacity === "0" ? "translateY(20px)" : "translateY(0)";
+        legend.style.display =
+          legend.style.display === "none" ? "block" : "none";
       }
     </script>
   </body>

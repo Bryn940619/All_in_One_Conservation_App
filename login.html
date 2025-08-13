@@ -10,10 +10,30 @@
         padding: 0;
         font-family: Arial, sans-serif;
         background: #f4f4f4;
+      }
+
+      /* Fixed header styles */
+      header {
+        background-color: #3182ce;
+        color: white;
+        padding: 1rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      /* Push content down so it’s not hidden behind the fixed header */
+      .page-content {
+        padding-top: 80px;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        min-height: calc(100vh - 80px);
       }
 
       .login-container {
@@ -78,32 +98,102 @@
     </style>
   </head>
   <body>
-    <div class="login-container">
-      <h2>Login</h2>
-      <form>
-        <label for="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          placeholder="Enter your email"
-          required
+    <header
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 20px;
+        background: linear-gradient(90deg, #2e541a, #a0dca4);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        color: white;
+      "
+    >
+      <div style="display: flex; align-items: center; gap: 10px">
+        <img
+          src="png.monster-142.png"
+          alt="EcoGuard Logo"
+          style="height: 40px; width: auto"
         />
+        <h1 style="margin: 0; font-family: Arial, sans-serif">EcoGuard</h1>
+      </div>
+      <nav>
+        <a
+          href="index.html"
+          style="
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+          "
+          >Home</a
+        >
+        <a
+          href="about.html"
+          style="
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+          "
+          >About</a
+        >
+        <a
+          href="contact.html"
+          style="
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+          "
+          >Contact</a
+        >
+        <a
+          href="login.html"
+          style="
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+          "
+          >Login</a
+        >
+      </nav>
+    </header>
 
-        <label for="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          placeholder="Enter your password"
-          required
-        />
+    <div class="page-content">
+      <div class="login-container">
+        <h2>Login</h2>
+        <form>
+          <label for="email">Email:</label>
+          <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            required
+          />
 
-        <button type="submit">Sign In</button>
-      </form>
-      <div class="extra-links">
-        <p>
-          Don't have an account?
-          <a href="signup.html">Create Account</a>
-        </p>
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            required
+          />
+
+          <button type="submit">Sign In</button>
+        </form>
+        <div class="extra-links">
+          <p>
+            Don't have an account?
+            <a href="signup.html">Create Account</a>
+          </p>
+        </div>
       </div>
     </div>
   </body>
